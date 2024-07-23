@@ -7,6 +7,8 @@
 
 #include <image_transport/image_transport.hpp>
 #include <sensor_msgs/msg/imu.hpp>
+#include <sensor_msgs/msg/nav_sat_fix.hpp>
+#include "geometry_msgs/msg/twist_with_covariance_stamped.hpp"
 #include <sensor_msgs/msg/image.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
 
@@ -29,6 +31,8 @@ public:
   void timer_callback();
 
   void imu_callback(const sensor_msgs::msg::Imu::SharedPtr msg);
+  void fix_callback(const sensor_msgs::msg::NavSatFix::SharedPtr msg);
+  void twist_callback(const geometry_msgs::msg::TwistWithCovarianceStamped::SharedPtr msg);
   void image_callback(const sensor_msgs::msg::Image::ConstSharedPtr msg);
   void points_callback(const sensor_msgs::msg::PointCloud2::ConstSharedPtr msg);
 
@@ -55,6 +59,8 @@ private:
   // ROS-related
   rclcpp::TimerBase::SharedPtr timer;
   rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr imu_sub;
+  rclcpp::Subscription<sensor_msgs::msg::NavSatFix>::SharedPtr fix_sub;
+  rclcpp::Subscription<geometry_msgs::msg::TwistWithCovarianceStamped>::SharedPtr twist_sub;
   rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr points_sub;
   image_transport::Subscriber image_sub;
 };
