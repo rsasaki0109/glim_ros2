@@ -158,6 +158,7 @@ GlimROS::GlimROS(const rclcpp::NodeOptions& options) : Node("glim_ros", options)
   // ROS-related
   using std::placeholders::_1;
   const std::string imu_topic = config_ros.param<std::string>("glim_ros", "imu_topic", "");
+  const std::string twist_topic = config_ros.param<std::string>("glim_ros", "twist_topic", "");
   const std::string points_topic = config_ros.param<std::string>("glim_ros", "points_topic", "");
   const std::string image_topic = config_ros.param<std::string>("glim_ros", "image_topic", "");
 
@@ -165,6 +166,7 @@ GlimROS::GlimROS(const rclcpp::NodeOptions& options) : Node("glim_ros", options)
   auto imu_qos = rclcpp::SensorDataQoS();
   imu_qos.get_rmw_qos_profile().depth = 1000;
   imu_sub = this->create_subscription<sensor_msgs::msg::Imu>(imu_topic, imu_qos, std::bind(&GlimROS::imu_callback, this, _1));
+  twist_sub = this->create_subscription<geometry_msgs::msg::TwistWithCovarianceStamped>(twist_topic, rclcpp::SensorDataQoS(), std::bind(&GlimROS::twist_callback, this, _1));
   points_sub = this->create_subscription<sensor_msgs::msg::PointCloud2>(points_topic, rclcpp::SensorDataQoS(), std::bind(&GlimROS::points_callback, this, _1));
   image_sub = image_transport::create_subscription(this, image_topic, std::bind(&GlimROS::image_callback, this, _1), "raw", rmw_qos_profile_sensor_data);
 
