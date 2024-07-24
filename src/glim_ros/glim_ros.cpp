@@ -209,6 +209,14 @@ void GlimROS::imu_callback(const sensor_msgs::msg::Imu::SharedPtr msg) {
   }
 }
 
+void GlimROS::twist_callback(const geometry_msgs::msg::TwistWithCovarianceStamped::SharedPtr msg) {
+  spdlog::trace("twist: {}.{}", msg->header.stamp.sec, msg->header.stamp.nanosec);
+
+  const double stamp = msg->header.stamp.sec + msg->header.stamp.nanosec / 1e9;
+
+  odometry_estimation->insert_twist(stamp, msg->twist.twist.linear.x);
+}
+
 void GlimROS::image_callback(const sensor_msgs::msg::Image::ConstSharedPtr msg) {
   spdlog::trace("image: {}.{}", msg->header.stamp.sec, msg->header.stamp.nanosec);
 
